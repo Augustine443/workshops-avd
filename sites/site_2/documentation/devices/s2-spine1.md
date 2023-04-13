@@ -140,7 +140,7 @@ management api http-commands
 
 ```eos
 !
-username arista privilege 15 role network-admin secret sha512 $6$W.NDPb/AcNdw2gAN$7veaquTy4eovBE5AlJ0g41It5hY2TDvs.sYy5Ht.Bv1qbbzaSaCLboRv0ldQwJuOV4crYUAb0yMEWCeU2UIgY1
+username arista privilege 15 role network-admin secret sha512 $6$Ia.53xAZ0uQxigB3$.5dI.VvhDpW.f/.OOfY840PhENikVUFhk8iSwy9UTye.JqJpR3FLtLhzZK3V8E21OY4mLmDO9wiI0kcH4pzK2/
 ```
 
 ## AAA Authorization
@@ -250,6 +250,7 @@ vlan internal order ascending range 1006 1199
 | ------- | ---- | ------------ |
 | 30 | Thirty | - |
 | 40 | Forty | - |
+| 45 | Forty-five | - |
 | 4093 | LEAF_PEER_L3 | LEAF_PEER_L3 |
 | 4094 | MLAG_PEER | MLAG |
 
@@ -262,6 +263,9 @@ vlan 30
 !
 vlan 40
    name Forty
+!
+vlan 45
+   name Forty-five
 !
 vlan 4093
    name LEAF_PEER_L3
@@ -429,6 +433,7 @@ interface Loopback0
 | --------- | ----------- | --- | ---- | -------- |
 | Vlan30 | Thirty | default | - | False |
 | Vlan40 | Forty | default | - | False |
+| Vlan45 | Forty-five | default | - | False |
 | Vlan4093 | MLAG_PEER_L3_PEERING | default | 1500 | False |
 | Vlan4094 | MLAG_PEER | default | 1500 | False |
 
@@ -437,7 +442,8 @@ interface Loopback0
 | Interface | VRF | IP Address | IP Address Virtual | IP Router Virtual Address | VRRP | ACL In | ACL Out |
 | --------- | --- | ---------- | ------------------ | ------------------------- | ---- | ------ | ------- |
 | Vlan30 |  default  |  10.30.30.2/24  |  -  |  10.30.30.1  |  -  |  -  |  -  |
-| Vlan40 |  default  |  10.40.40.2/24  |  -  |  10.40.40.1  |  -  |  -  |  -  |
+| Vlan40 |  default  |  -  |  -  |  -  |  -  |  -  |  -  |
+| Vlan45 |  default  |  10.40.40.2/24  |  -  |  10.45.45.1  |  -  |  -  |  -  |
 | Vlan4093 |  default  |  10.2.254.0/31  |  -  |  -  |  -  |  -  |  -  |
 | Vlan4094 |  default  |  10.2.253.0/31  |  -  |  -  |  -  |  -  |  -  |
 
@@ -454,8 +460,12 @@ interface Vlan30
 interface Vlan40
    description Forty
    no shutdown
+!
+interface Vlan45
+   description Forty-five
+   no shutdown
    ip address 10.40.40.2/24
-   ip virtual-router address 10.40.40.1
+   ip virtual-router address 10.45.45.1
 !
 interface Vlan4093
    description MLAG_PEER_L3_PEERING
